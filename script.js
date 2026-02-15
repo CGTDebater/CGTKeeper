@@ -4,9 +4,9 @@ let interval = null;
 
 let questionInterval = null;
 let questionActive = false;
-let questionCancelled = false; // YENİ
+let questionCancelled = false;
 
-// SADECE BU AUDIO SİSTEMİNİ KULLANIYORUZ
+// AUDIO
 const clapAudio = new Audio("clap.mp3");
 const questionAudio = new Audio("question.mp3");
 
@@ -33,7 +33,6 @@ function playQuestionSound() {
     questionAudio.play().catch(() => {});
 }
 
-// Mobil için audio unlock
 function unlockAudio() {
     clapAudio.play().then(() => {
         clapAudio.pause();
@@ -46,30 +45,62 @@ function unlockAudio() {
     }).catch(() => {});
 }
 
+function timerTick() {
+
+    if (currentSeconds >= totalSeconds) {
+        playClap(3);
+        clearInterval(interval);
+        interval = null;
+
+        document.getElementById("stopBtn").style.display = "none";
+        document.getElementById("resumeBtn").style.display = "none";
+        document.getElementById("startBtn").style.display = "inline-block";
+
+        return;
+    }
+
+    currentSeconds++;
+    document.getElementById("timer").innerText = formatTime(currentSeconds);
+
+    if (currentSeconds === 60) playClap(1);
+    if (currentSeconds === 360) playClap(1);
+    if (currentSeconds === 420) playClap(2);
+}
+
+// BAŞLAT
 function startTimer() {
     if (interval) return;
 
     unlockAudio();
 
-    interval = setInterval(() => {
+    interval = setInterval(timerTick, 1000);
 
-        if (currentSeconds >= totalSeconds) {
-            playClap(3);
-            clearInterval(interval);
-            interval = null;
-            return;
-        }
-
-        currentSeconds++;
-        document.getElementById("timer").innerText = formatTime(currentSeconds);
-
-        if (currentSeconds === 60) playClap(1);
-        if (currentSeconds === 360) playClap(1);
-        if (currentSeconds === 420) playClap(2);
-
-    }, 1000);
+    document.getElementById("startBtn").style.display = "none";
+    document.getElementById("stopBtn").style.display = "inline-block";
 }
 
+// DURDUR
+function stopTimer() {
+    if (!interval) return;
+
+    clearInterval(interval);
+    interval = null;
+
+    document.getElementById("stopBtn").style.display = "none";
+    document.getElementById("resumeBtn").style.display = "inline-block";
+}
+
+// DEVAM
+function resumeTimer() {
+    if (interval) return;
+
+    interval = setInterval(timerTick, 1000);
+
+    document.getElementById("resumeBtn").style.display = "none";
+    document.getElementById("stopBtn").style.display = "inline-block";
+}
+
+// RESET
 function resetTimer() {
     clearInterval(interval);
     clearInterval(questionInterval);
@@ -84,8 +115,13 @@ function resetTimer() {
     document.getElementById("questionCountdown").innerText = "";
     document.getElementById("questionBtn").disabled = false;
     document.getElementById("cancelBtn").style.display = "none";
+
+    document.getElementById("startBtn").style.display = "inline-block";
+    document.getElementById("stopBtn").style.display = "none";
+    document.getElementById("resumeBtn").style.display = "none";
 }
 
+// SORU
 function questionTimer() {
     if (questionActive) return;
 
@@ -124,9 +160,8 @@ function questionTimer() {
     }, 1000);
 }
 
-// YENİ FONKSİYON
+// İPTAL
 function cancelQuestion() {
-
     if (!questionActive) return;
 
     questionCancelled = true;
