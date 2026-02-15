@@ -24,16 +24,17 @@ function formatTime(seconds) {
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            const sound = clapBase.cloneNode();
-            sound.play().catch(e => console.log("Clap error:", e));
+            clapAudio.currentTime = 0;
+            clapAudio.play().catch(e => console.log(e));
         }, i * 900);
     }
 }
 
 function playQuestionSound() {
-    const sound = questionBase.cloneNode();
-    sound.play().catch(e => console.log("Question sound error:", e));
+    questionAudio.currentTime = 0;
+    questionAudio.play().catch(e => console.log(e));
 }
+
 
 function startTimer() {
     if (interval) return;
@@ -113,4 +114,5 @@ function questionTimer() {
 
     }, 1000);
 }
+
 
