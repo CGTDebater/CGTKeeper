@@ -1,7 +1,7 @@
 body {
     margin: 0;
     background: #111;
-    color: white;
+    color: darkblue;
     font-family: Arial, sans-serif;
     text-align: center;
 }
@@ -57,3 +57,4 @@ button:disabled {
     opacity: 0.25;
     pointer-events: none;
 }
+
