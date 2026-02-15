@@ -2,24 +2,28 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>CGTkeeper</title>
+    <title>BP Timekeeper</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>CGTkeeper</h1>
-        <div id="timer">07:20</div>
+        <h1>BP Timekeeper</h1>
+
+        <div id="timer">00:00</div>
+
+        <div id="poiStatus">Protected Time</div>
+
+        <div id="questionCountdown"></div>
 
         <div class="buttons">
             <button onclick="startTimer()">Başlat</button>
-            <button onclick="questionTimer()">Soru</button>
+            <button id="questionBtn" onclick="questionTimer()">Soru</button>
             <button onclick="resetTimer()">Sıfırla</button>
         </div>
     </div>
 
-    <audio id="clap" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
-    <audio id="questionSound" src="https://www.soundjay.com/button/beep-07.mp3"></audio>
+    <div class="signature">Created by CGT</div>
 
     <script src="script.js"></script>
 </body>
