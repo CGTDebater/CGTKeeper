@@ -5,9 +5,9 @@ let interval = null;
 let questionInterval = null;
 let questionActive = false;
 
-// LOCAL CLAP
-let clapSound = new Audio("clapping.m4a");
-clapSound.preload = "auto";
+// CLAP AUDIO (LOCAL)
+const clapBase = new Audio("clapping.m4a");
+clapBase.preload = "auto";
 
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
@@ -18,19 +18,19 @@ function formatTime(seconds) {
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            let sound = new Audio("clapping.m4a");
-            sound.play().catch(() => {});
-        }, i * 900);
+            const clap = clapBase.cloneNode();
+            clap.play().catch(err => console.log("Clap error:", err));
+        }, i * 800);
     }
 }
 
 function startTimer() {
     if (interval) return;
 
-    // Audio unlock (çok önemli)
-    clapSound.play().then(() => {
-        clapSound.pause();
-        clapSound.currentTime = 0;
+    // AUDIO UNLOCK
+    clapBase.play().then(() => {
+        clapBase.pause();
+        clapBase.currentTime = 0;
     }).catch(() => {});
 
     interval = setInterval(() => {
@@ -44,8 +44,6 @@ function startTimer() {
 
         currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
-
-        updateQuestionVisibility();
 
         if (currentSeconds === 60) {
             playClap(1); // 1:00
@@ -73,28 +71,11 @@ function resetTimer() {
 
     document.getElementById("timer").innerText = "00:00";
     document.getElementById("questionCountdown").innerText = "";
-    document.getElementById("questionBtn").style.display = "none";
     document.getElementById("questionBtn").disabled = false;
-}
-
-function updateQuestionVisibility() {
-    let btn = document.getElementById("questionBtn");
-
-    if (currentSeconds >= 60 && currentSeconds < 360) {
-        btn.style.display = "inline-block";
-    } else {
-        btn.style.display = "none";
-    }
 }
 
 function questionTimer() {
     if (questionActive) return;
-    startQuestion();
-}
-
-function startQuestion() {
-
-    if (currentSeconds >= 360) return;
 
     questionActive = true;
 
@@ -116,7 +97,6 @@ function startQuestion() {
             questionInterval = null;
             display.innerText = "";
             questionActive = false;
-
             btn.disabled = false;
 
             speakText("Soru süresi doldu");
@@ -128,5 +108,7 @@ function startQuestion() {
 function speakText(text) {
     let speech = new SpeechSynthesisUtterance(text);
     speech.lang = "tr-TR";
+    speech.rate = 1;
+    speech.pitch = 1;
     window.speechSynthesis.speak(speech);
 }
