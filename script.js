@@ -4,6 +4,7 @@ let interval = null;
 
 let questionInterval = null;
 let questionActive = false;
+let questionCancelled = false; // YENİ
 
 // SADECE BU AUDIO SİSTEMİNİ KULLANIYORUZ
 const clapAudio = new Audio("clap.mp3");
@@ -76,22 +77,27 @@ function resetTimer() {
     interval = null;
     questionInterval = null;
     questionActive = false;
+    questionCancelled = false;
     currentSeconds = 0;
 
     document.getElementById("timer").innerText = "00:00";
     document.getElementById("questionCountdown").innerText = "";
     document.getElementById("questionBtn").disabled = false;
+    document.getElementById("cancelBtn").style.display = "none";
 }
 
 function questionTimer() {
     if (questionActive) return;
 
     questionActive = true;
+    questionCancelled = false;
 
     let btn = document.getElementById("questionBtn");
+    let cancelBtn = document.getElementById("cancelBtn");
     let display = document.getElementById("questionCountdown");
 
     btn.disabled = true;
+    cancelBtn.style.display = "inline-block";
 
     let qTime = 15;
     display.innerText = `Soru: ${qTime}`;
@@ -104,12 +110,33 @@ function questionTimer() {
         if (qTime <= 0) {
             clearInterval(questionInterval);
             questionInterval = null;
+
             display.innerText = "";
+            cancelBtn.style.display = "none";
             questionActive = false;
             btn.disabled = false;
 
-            playQuestionSound();
+            if (!questionCancelled) {
+                playQuestionSound();
+            }
         }
 
     }, 1000);
+}
+
+// YENİ FONKSİYON
+function cancelQuestion() {
+
+    if (!questionActive) return;
+
+    questionCancelled = true;
+
+    clearInterval(questionInterval);
+    questionInterval = null;
+
+    document.getElementById("questionCountdown").innerText = "";
+    document.getElementById("cancelBtn").style.display = "none";
+    document.getElementById("questionBtn").disabled = false;
+
+    questionActive = false;
 }
