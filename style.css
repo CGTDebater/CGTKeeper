@@ -7,12 +7,32 @@ body {
 }
 
 .container {
-    margin-top: 100px;
+    margin-top: 80px;
 }
 
 #timer {
-    font-size: 100px;
-    margin: 40px 0;
+    font-size: 120px;
+    margin: 20px 0;
+}
+
+#poiStatus {
+    font-size: 30px;
+    margin: 10px 0;
+    height: 40px;
+}
+
+.poi-open {
+    color: #00ff88;
+}
+
+.poi-closed {
+    color: red;
+}
+
+#questionCountdown {
+    font-size: 28px;
+    color: orange;
+    height: 40px;
 }
 
 button {
@@ -20,4 +40,20 @@ button {
     font-size: 18px;
     margin: 10px;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.signature {
+    position: fixed;
+    bottom: 15px;
+    right: 20px;
+    font-size: 14px;
+    opacity: 0.25;
+    pointer-events: none;
 }
