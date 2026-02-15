@@ -15,18 +15,43 @@
         <div id="questionCountdown"></div>
 
         <div class="buttons">
-            <button onclick="startTimer()">Başlat</button>
 
-            <button id="questionBtn" onclick="questionTimer()">Soru</button>
+            <!-- BAŞLAT -->
+            <button id="startBtn" onclick="startTimer()">
+                Başlat
+            </button>
 
-            <!-- YENİ EKLENEN BUTON -->
+            <!-- DURDUR -->
+            <button id="stopBtn"
+                    onclick="stopTimer()"
+                    style="display:none;">
+                Durdur
+            </button>
+
+            <!-- DEVAM ET -->
+            <button id="resumeBtn"
+                    onclick="resumeTimer()"
+                    style="display:none;">
+                Devam Et
+            </button>
+
+            <!-- SORU -->
+            <button id="questionBtn" onclick="questionTimer()">
+                Soru
+            </button>
+
+            <!-- İPTAL -->
             <button id="cancelBtn"
                     onclick="cancelQuestion()"
                     style="display:none;">
                 İptal
             </button>
 
-            <button onclick="resetTimer()">Sıfırla</button>
+            <!-- SIFIRLA -->
+            <button onclick="resetTimer()">
+                Sıfırla
+            </button>
+
         </div>
     </div>
 
