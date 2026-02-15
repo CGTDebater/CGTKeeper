@@ -5,6 +5,10 @@ let interval = null;
 let questionInterval = null;
 let questionActive = false;
 
+// LOCAL CLAP
+let clapSound = new Audio("clapping.m4a");
+clapSound.preload = "auto";
+
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -14,19 +18,25 @@ function formatTime(seconds) {
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            let clap = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-clapping-crowd-485.mp3");
-            clap.play();
-        }, i * 700);
+            let sound = new Audio("clapping.m4a");
+            sound.play().catch(() => {});
+        }, i * 900);
     }
 }
 
 function startTimer() {
     if (interval) return;
 
+    // Audio unlock (çok önemli)
+    clapSound.play().then(() => {
+        clapSound.pause();
+        clapSound.currentTime = 0;
+    }).catch(() => {});
+
     interval = setInterval(() => {
 
         if (currentSeconds >= totalSeconds) {
-            playClap(3);
+            playClap(3); // 7:20
             clearInterval(interval);
             interval = null;
             return;
@@ -37,9 +47,17 @@ function startTimer() {
 
         updateQuestionVisibility();
 
-        if (currentSeconds === 60) playClap(1);
-        if (currentSeconds === 360) playClap(1);
-        if (currentSeconds === 420) playClap(2);
+        if (currentSeconds === 60) {
+            playClap(1); // 1:00
+        }
+
+        if (currentSeconds === 360) {
+            playClap(1); // 6:00
+        }
+
+        if (currentSeconds === 420) {
+            playClap(2); // 7:00
+        }
 
     }, 1000);
 }
@@ -59,7 +77,6 @@ function resetTimer() {
     document.getElementById("questionBtn").disabled = false;
 }
 
-// 1–6 dk arası görünür
 function updateQuestionVisibility() {
     let btn = document.getElementById("questionBtn");
 
@@ -70,7 +87,6 @@ function updateQuestionVisibility() {
     }
 }
 
-// Butona basılınca
 function questionTimer() {
     if (questionActive) return;
     startQuestion();
@@ -78,7 +94,6 @@ function questionTimer() {
 
 function startQuestion() {
 
-    // 6.dk sonrası tamamen kapalı
     if (currentSeconds >= 360) return;
 
     questionActive = true;
@@ -113,7 +128,5 @@ function startQuestion() {
 function speakText(text) {
     let speech = new SpeechSynthesisUtterance(text);
     speech.lang = "tr-TR";
-    speech.rate = 1;
-    speech.pitch = 1;
     window.speechSynthesis.speak(speech);
 }
