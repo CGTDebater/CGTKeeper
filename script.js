@@ -13,12 +13,18 @@ const questionAudio = new Audio("question.mp3");
 clapAudio.preload = "auto";
 questionAudio.preload = "auto";
 
+// MASKOT IMG ELEMENTLERİ
+const mascot1 = document.getElementById("mascot1");
+const mascot2 = document.getElementById("mascot2");
+
+// FORMAT
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
     let secs = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
+// ALKIŞ
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
@@ -28,25 +34,39 @@ function playClap(times) {
     }
 }
 
+// SORU SÜRESİ SES
 function playQuestionSound() {
     questionAudio.currentTime = 0;
     questionAudio.play().catch(() => {});
 }
 
+// AUDIO UNLOCK (Mobil için)
 function unlockAudio() {
-    clapAudio.play().then(() => {
-        clapAudio.pause();
-        clapAudio.currentTime = 0;
-    }).catch(() => {});
-
-    questionAudio.play().then(() => {
-        questionAudio.pause();
-        questionAudio.currentTime = 0;
-    }).catch(() => {});
+    clapAudio.play().then(() => { clapAudio.pause(); clapAudio.currentTime = 0; }).catch(() => {});
+    questionAudio.play().then(() => { questionAudio.pause(); questionAudio.currentTime = 0; }).catch(() => {});
 }
 
-function timerTick() {
+// MASKOT GÖSTERME
+function showMascot1() {
+    mascot1.style.width = "200px";      // 2 kat genişle
+    mascot1.style.display = "block";
+    setTimeout(() => { 
+        mascot1.style.display = "none"; 
+        mascot1.style.width = "100px";  // orijinal boyuta dön
+    }, 1000);
+}
 
+function showMascot2() {
+    mascot2.style.width = "200px";      // 2 kat genişle
+    mascot2.style.display = "block";
+    setTimeout(() => { 
+        mascot2.style.display = "none"; 
+        mascot2.style.width = "100px";  // orijinal boyuta dön
+    }, 1000);
+}
+
+// TIMER TICK
+function timerTick() {
     if (currentSeconds >= totalSeconds) {
         playClap(3);
         clearInterval(interval);
@@ -55,16 +75,24 @@ function timerTick() {
         document.getElementById("stopBtn").style.display = "none";
         document.getElementById("resumeBtn").style.display = "none";
         document.getElementById("startBtn").style.display = "inline-block";
-
         return;
     }
 
     currentSeconds++;
     document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-    if (currentSeconds === 60) playClap(1);
-    if (currentSeconds === 360) playClap(1);
-    if (currentSeconds === 420) playClap(2);
+    // MASKOT + CLAP SENKRON
+    if (currentSeconds === 59) showMascot1();
+    if (currentSeconds === 60) { showMascot2(); playClap(1); }
+
+    if (currentSeconds === 359) showMascot1();
+    if (currentSeconds === 360) { showMascot2(); playClap(1); }
+
+    if (currentSeconds === 419) showMascot1();
+    if (currentSeconds === 420) { showMascot2(); playClap(2); }
+
+    if (currentSeconds === 439) showMascot1();
+    if (currentSeconds === 440) { showMascot2(); playClap(3); }
 }
 
 // BAŞLAT
@@ -72,7 +100,6 @@ function startTimer() {
     if (interval) return;
 
     unlockAudio();
-
     interval = setInterval(timerTick, 1000);
 
     document.getElementById("startBtn").style.display = "none";
@@ -90,7 +117,7 @@ function stopTimer() {
     document.getElementById("resumeBtn").style.display = "inline-block";
 }
 
-// DEVAM
+// DEVAM ET
 function resumeTimer() {
     if (interval) return;
 
@@ -139,7 +166,6 @@ function questionTimer() {
     display.innerText = `Soru: ${qTime}`;
 
     questionInterval = setInterval(() => {
-
         qTime--;
         display.innerText = `Soru: ${qTime}`;
 
@@ -152,9 +178,7 @@ function questionTimer() {
             questionActive = false;
             btn.disabled = false;
 
-            if (!questionCancelled) {
-                playQuestionSound();
-            }
+            if (!questionCancelled) playQuestionSound();
         }
 
     }, 1000);
