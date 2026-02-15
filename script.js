@@ -12,6 +12,9 @@ clapBase.preload = "auto";
 const questionBase = new Audio("question.mp3");
 questionBase.preload = "auto";
 
+const clapAudio = document.getElementById("clapAudio");
+const questionAudio = document.getElementById("questionAudio");
+
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -110,3 +113,4 @@ function questionTimer() {
 
     }, 1000);
 }
+
