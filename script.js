@@ -20,37 +20,26 @@ function playClap(times) {
     }
 }
 
-function updatePOI() {
-    let poi = document.getElementById("poiStatus");
-
-    if (currentSeconds >= 60 && currentSeconds < 360) {
-        poi.innerText = "POI OPEN";
-        poi.className = "poi-open";
-    } else {
-        poi.innerText = "PROTECTED TIME";
-        poi.className = "poi-closed";
-    }
-}
-
 function startTimer() {
     if (interval) return;
 
     interval = setInterval(() => {
 
+        if (currentSeconds >= totalSeconds) {
+            playClap(3);
+            clearInterval(interval);
+            interval = null;
+            return;
+        }
+
         currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-        updatePOI();
+        updateQuestionVisibility();
 
         if (currentSeconds === 60) playClap(1);
         if (currentSeconds === 360) playClap(1);
         if (currentSeconds === 420) playClap(2);
-
-        if (currentSeconds === 440) {
-            playClap(3);
-            clearInterval(interval);
-            interval = null;
-        }
 
     }, 1000);
 }
@@ -66,15 +55,34 @@ function resetTimer() {
 
     document.getElementById("timer").innerText = "00:00";
     document.getElementById("questionCountdown").innerText = "";
+    document.getElementById("questionBtn").style.display = "none";
     document.getElementById("questionBtn").disabled = false;
-
-    updatePOI();
 }
 
+// 1–6 dk arası görünür
+function updateQuestionVisibility() {
+    let btn = document.getElementById("questionBtn");
+
+    if (currentSeconds >= 60 && currentSeconds < 360) {
+        btn.style.display = "inline-block";
+    } else {
+        btn.style.display = "none";
+    }
+}
+
+// Butona basılınca
 function questionTimer() {
     if (questionActive) return;
+    startQuestion();
+}
+
+function startQuestion() {
+
+    // 6.dk sonrası tamamen kapalı
+    if (currentSeconds >= 360) return;
 
     questionActive = true;
+
     let btn = document.getElementById("questionBtn");
     let display = document.getElementById("questionCountdown");
 
@@ -93,6 +101,7 @@ function questionTimer() {
             questionInterval = null;
             display.innerText = "";
             questionActive = false;
+
             btn.disabled = false;
 
             speakText("Soru süresi doldu");
@@ -108,6 +117,3 @@ function speakText(text) {
     speech.pitch = 1;
     window.speechSynthesis.speak(speech);
 }
-
-// Başlangıçta doğru gösterim
-updatePOI();
