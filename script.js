@@ -1,6 +1,9 @@
-let totalSeconds = 440; // 7 dakika 20 saniye
-let currentSeconds = totalSeconds;
+let totalSeconds = 440; // 7:20
+let currentSeconds = 0;
 let interval = null;
+
+let questionInterval = null;
+let questionActive = false;
 
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
@@ -9,12 +12,23 @@ function formatTime(seconds) {
 }
 
 function playClap(times) {
-    let clap = document.getElementById("clap");
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            clap.currentTime = 0;
+            let clap = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-clapping-crowd-485.mp3");
             clap.play();
-        }, i * 600);
+        }, i * 700);
+    }
+}
+
+function updatePOI() {
+    let poi = document.getElementById("poiStatus");
+
+    if (currentSeconds >= 60 && currentSeconds < 360) {
+        poi.innerText = "POI OPEN";
+        poi.className = "poi-open";
+    } else {
+        poi.innerText = "PROTECTED TIME";
+        poi.className = "poi-closed";
     }
 }
 
@@ -22,22 +36,17 @@ function startTimer() {
     if (interval) return;
 
     interval = setInterval(() => {
-        currentSeconds--;
+
+        currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-        let elapsed = totalSeconds - currentSeconds;
+        updatePOI();
 
-        // 1. dakika (60 sn)
-        if (elapsed === 60) playClap(1);
+        if (currentSeconds === 60) playClap(1);
+        if (currentSeconds === 360) playClap(1);
+        if (currentSeconds === 420) playClap(2);
 
-        // 6. dakika (360 sn)
-        if (elapsed === 360) playClap(1);
-
-        // 7. dakika (420 sn)
-        if (elapsed === 420) playClap(2);
-
-        // 7:20 (440 sn)
-        if (elapsed === 440) {
+        if (currentSeconds === 440) {
             playClap(3);
             clearInterval(interval);
             interval = null;
@@ -48,20 +57,57 @@ function startTimer() {
 
 function resetTimer() {
     clearInterval(interval);
+    clearInterval(questionInterval);
+
     interval = null;
-    currentSeconds = totalSeconds;
-    document.getElementById("timer").innerText = "07:20";
+    questionInterval = null;
+    questionActive = false;
+    currentSeconds = 0;
+
+    document.getElementById("timer").innerText = "00:00";
+    document.getElementById("questionCountdown").innerText = "";
+    document.getElementById("questionBtn").disabled = false;
+
+    updatePOI();
 }
 
 function questionTimer() {
-    let questionSound = document.getElementById("questionSound");
+    if (questionActive) return;
 
-    questionSound.currentTime = 0;
-    questionSound.play();
+    questionActive = true;
+    let btn = document.getElementById("questionBtn");
+    let display = document.getElementById("questionCountdown");
 
-    setTimeout(() => {
-        questionSound.currentTime = 0;
-        questionSound.play();
-        alert("Soru süresi doldu!");
-    }, 15000);
+    btn.disabled = true;
+
+    let qTime = 15;
+    display.innerText = `Soru: ${qTime}`;
+
+    questionInterval = setInterval(() => {
+
+        qTime--;
+        display.innerText = `Soru: ${qTime}`;
+
+        if (qTime <= 0) {
+            clearInterval(questionInterval);
+            questionInterval = null;
+            display.innerText = "";
+            questionActive = false;
+            btn.disabled = false;
+
+            speakText("Soru süresi doldu");
+        }
+
+    }, 1000);
 }
+
+function speakText(text) {
+    let speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "tr-TR";
+    speech.rate = 1;
+    speech.pitch = 1;
+    window.speechSynthesis.speak(speech);
+}
+
+// Başlangıçta doğru gösterim
+updatePOI();
