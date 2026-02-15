@@ -5,15 +5,12 @@ let interval = null;
 let questionInterval = null;
 let questionActive = false;
 
-// AUDIO DOSYALARI
-const clapBase = new Audio("clap.mp3");
-clapBase.preload = "auto";
+// SADECE BU AUDIO SİSTEMİNİ KULLANIYORUZ
+const clapAudio = new Audio("clap.mp3");
+const questionAudio = new Audio("question.mp3");
 
-const questionBase = new Audio("question.mp3");
-questionBase.preload = "auto";
-
-const clapAudio = document.getElementById("clapAudio");
-const questionAudio = document.getElementById("questionAudio");
+clapAudio.preload = "auto";
+questionAudio.preload = "auto";
 
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
@@ -25,36 +22,38 @@ function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
             clapAudio.currentTime = 0;
-            clapAudio.play().catch(e => console.log(e));
+            clapAudio.play().catch(() => {});
         }, i * 900);
     }
 }
 
 function playQuestionSound() {
     questionAudio.currentTime = 0;
-    questionAudio.play().catch(e => console.log(e));
+    questionAudio.play().catch(() => {});
 }
 
+// Mobil için audio unlock
+function unlockAudio() {
+    clapAudio.play().then(() => {
+        clapAudio.pause();
+        clapAudio.currentTime = 0;
+    }).catch(() => {});
+
+    questionAudio.play().then(() => {
+        questionAudio.pause();
+        questionAudio.currentTime = 0;
+    }).catch(() => {});
+}
 
 function startTimer() {
     if (interval) return;
 
-    // AUDIO UNLOCK (çok önemli)
-    Promise.all([
-        clapBase.play().then(() => {
-            clapBase.pause();
-            clapBase.currentTime = 0;
-        }).catch(() => {}),
-        questionBase.play().then(() => {
-            questionBase.pause();
-            questionBase.currentTime = 0;
-        }).catch(() => {})
-    ]);
+    unlockAudio();
 
     interval = setInterval(() => {
 
         if (currentSeconds >= totalSeconds) {
-            playClap(3); // 7:20
+            playClap(3);
             clearInterval(interval);
             interval = null;
             return;
@@ -63,9 +62,9 @@ function startTimer() {
         currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-        if (currentSeconds === 60) playClap(1);   // 1:00
-        if (currentSeconds === 360) playClap(1);  // 6:00
-        if (currentSeconds === 420) playClap(2);  // 7:00
+        if (currentSeconds === 60) playClap(1);
+        if (currentSeconds === 360) playClap(1);
+        if (currentSeconds === 420) playClap(2);
 
     }, 1000);
 }
@@ -109,10 +108,8 @@ function questionTimer() {
             questionActive = false;
             btn.disabled = false;
 
-            playQuestionSound(); // MP3 ÇALIYOR
+            playQuestionSound();
         }
 
     }, 1000);
 }
-
-
