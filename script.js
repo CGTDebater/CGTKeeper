@@ -5,10 +5,12 @@ let interval = null;
 let questionInterval = null;
 let questionActive = false;
 
-// CLAP BASE
-const clapBase = new Audio();
-clapBase.src = "clap.mp3";
-clapBase.load();
+// AUDIO DOSYALARI
+const clapBase = new Audio("clap.mp3");
+clapBase.preload = "auto";
+
+const questionBase = new Audio("question.mp3");
+questionBase.preload = "auto";
 
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
@@ -19,25 +21,36 @@ function formatTime(seconds) {
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            const sound = new Audio("clap.mp3");
-            sound.play().catch(e => console.log(e));
+            const sound = clapBase.cloneNode();
+            sound.play().catch(e => console.log("Clap error:", e));
         }, i * 900);
     }
+}
+
+function playQuestionSound() {
+    const sound = questionBase.cloneNode();
+    sound.play().catch(e => console.log("Question sound error:", e));
 }
 
 function startTimer() {
     if (interval) return;
 
-    // AUDIO UNLOCK
-    clapBase.play().then(() => {
-        clapBase.pause();
-        clapBase.currentTime = 0;
-    }).catch(() => {});
+    // AUDIO UNLOCK (çok önemli)
+    Promise.all([
+        clapBase.play().then(() => {
+            clapBase.pause();
+            clapBase.currentTime = 0;
+        }).catch(() => {}),
+        questionBase.play().then(() => {
+            questionBase.pause();
+            questionBase.currentTime = 0;
+        }).catch(() => {})
+    ]);
 
     interval = setInterval(() => {
 
         if (currentSeconds >= totalSeconds) {
-            playClap(3);
+            playClap(3); // 7:20
             clearInterval(interval);
             interval = null;
             return;
@@ -46,9 +59,9 @@ function startTimer() {
         currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-        if (currentSeconds === 60) playClap(1);
-        if (currentSeconds === 360) playClap(1);
-        if (currentSeconds === 420) playClap(2);
+        if (currentSeconds === 60) playClap(1);   // 1:00
+        if (currentSeconds === 360) playClap(1);  // 6:00
+        if (currentSeconds === 420) playClap(2);  // 7:00
 
     }, 1000);
 }
@@ -92,14 +105,8 @@ function questionTimer() {
             questionActive = false;
             btn.disabled = false;
 
-            speakText("Soru süresi doldu");
+            playQuestionSound(); // MP3 ÇALIYOR
         }
 
     }, 1000);
-}
-
-function speakText(text) {
-    let speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "tr-TR";
-    window.speechSynthesis.speak(speech);
 }
