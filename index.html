@@ -16,14 +16,22 @@
 
         <div class="buttons">
             <button onclick="startTimer()">Başlat</button>
+
             <button id="questionBtn" onclick="questionTimer()">Soru</button>
+
+            <!-- YENİ EKLENEN BUTON -->
+            <button id="cancelBtn"
+                    onclick="cancelQuestion()"
+                    style="display:none;">
+                İptal
+            </button>
+
             <button onclick="resetTimer()">Sıfırla</button>
         </div>
     </div>
 
     <div class="signature">Created by CGT</div>
 
-    <!-- Script en sonda -->
     <script src="script.js"></script>
 
 </body>
