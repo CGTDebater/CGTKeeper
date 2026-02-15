@@ -5,9 +5,10 @@ let interval = null;
 let questionInterval = null;
 let questionActive = false;
 
-// CLAP AUDIO (LOCAL)
-const clapBase = new Audio("clapping.m4a");
-clapBase.preload = "auto";
+// CLAP BASE
+const clapBase = new Audio();
+clapBase.src = "clap.mp3";
+clapBase.load();
 
 function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
@@ -18,9 +19,9 @@ function formatTime(seconds) {
 function playClap(times) {
     for (let i = 0; i < times; i++) {
         setTimeout(() => {
-            const clap = clapBase.cloneNode();
-            clap.play().catch(err => console.log("Clap error:", err));
-        }, i * 800);
+            const sound = new Audio("clap.mp3");
+            sound.play().catch(e => console.log(e));
+        }, i * 900);
     }
 }
 
@@ -36,7 +37,7 @@ function startTimer() {
     interval = setInterval(() => {
 
         if (currentSeconds >= totalSeconds) {
-            playClap(3); // 7:20
+            playClap(3);
             clearInterval(interval);
             interval = null;
             return;
@@ -45,17 +46,9 @@ function startTimer() {
         currentSeconds++;
         document.getElementById("timer").innerText = formatTime(currentSeconds);
 
-        if (currentSeconds === 60) {
-            playClap(1); // 1:00
-        }
-
-        if (currentSeconds === 360) {
-            playClap(1); // 6:00
-        }
-
-        if (currentSeconds === 420) {
-            playClap(2); // 7:00
-        }
+        if (currentSeconds === 60) playClap(1);
+        if (currentSeconds === 360) playClap(1);
+        if (currentSeconds === 420) playClap(2);
 
     }, 1000);
 }
@@ -108,7 +101,5 @@ function questionTimer() {
 function speakText(text) {
     let speech = new SpeechSynthesisUtterance(text);
     speech.lang = "tr-TR";
-    speech.rate = 1;
-    speech.pitch = 1;
     window.speechSynthesis.speak(speech);
 }
