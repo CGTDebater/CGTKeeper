@@ -16,44 +16,23 @@
 
         <div class="buttons">
 
-            <!-- BAŞLAT -->
-            <button id="startBtn" onclick="startTimer()">
-                Başlat
-            </button>
-
-            <!-- DURDUR -->
-            <button id="stopBtn"
-                    onclick="stopTimer()"
-                    style="display:none;">
-                Durdur
-            </button>
-
-            <!-- DEVAM ET -->
-            <button id="resumeBtn"
-                    onclick="resumeTimer()"
-                    style="display:none;">
-                Devam Et
-            </button>
-
-            <!-- SORU -->
-            <button id="questionBtn" onclick="questionTimer()">
-                Soru
-            </button>
-
-            <!-- İPTAL -->
-            <button id="cancelBtn"
-                    onclick="cancelQuestion()"
-                    style="display:none;">
-                İptal
-            </button>
-
-            <!-- SIFIRLA -->
-            <button onclick="resetTimer()">
-                Sıfırla
-            </button>
+            <button id="startBtn" onclick="startTimer()">Başlat</button>
+            <button id="stopBtn" onclick="stopTimer()" style="display:none;">Durdur</button>
+            <button id="resumeBtn" onclick="resumeTimer()" style="display:none;">Devam Et</button>
+            <button id="questionBtn" onclick="questionTimer()">Soru</button>
+            <button id="cancelBtn" onclick="cancelQuestion()" style="display:none;">İptal</button>
+            <button onclick="resetTimer()">Sıfırla</button>
 
         </div>
     </div>
+
+    <!-- MASKOT FOTO 1 -->
+    <img id="mascot1" src="photo1.png"
+         style="position:fixed; left:10px; bottom:10px; width:100px; display:none; transition: width 0.2s;" />
+
+    <!-- MASKOT FOTO 2 -->
+    <img id="mascot2" src="photo2.png"
+         style="position:fixed; left:10px; bottom:10px; width:100px; display:none; transition: width 0.2s;" />
 
     <div class="signature">Created by CGT</div>
 
