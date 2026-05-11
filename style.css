@@ -1,0 +1,479 @@
+/* style.css */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.credit {
+    position: fixed;
+    bottom: 20px;
+    left: 25px;
+    z-index: 9999;
+    pointer-events: auto;
+    font-size: 12px;
+    color: #ddd;
+
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 10px;
+    
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.credit:hover {
+    opacity: 1;
+    color: orange;
+    border-color: rgba(255, 165, 0, 0.4);
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+/* ── SIDEBAR AÇ BUTONU ── */
+#sidebarOpenBtn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 200;
+    background: #1a1a1a;
+    color: #aaa;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: opacity 0.25s ease, background 0.2s;
+}
+#sidebarOpenBtn:hover { background: #2a2a2a; color: #fff; }
+#sidebarOpenBtn.hidden { opacity: 0; pointer-events: none; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 290px;
+    background: #111;
+    border-left: 1px solid #333;
+    padding: 35px 16px 35px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    overflow-y: auto;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar.open { transform: translateX(0); }
+
+#sidebarCloseBtn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+#sidebarCloseBtn:hover { background: #222; color: #fff; }
+
+/* ── FORMAT SEKME BUTONLARI ── */
+.format-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+}
+
+.fmt-btn {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13px;
+    background: #1e1e1e;
+    color: #aaa;
+    border: 1px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.fmt-btn:hover:not(.active) { background: #2a2a2a; color: #fff; }
+.fmt-btn.active {
+    background: #003322;
+    color: #00ff88;
+    border-color: #00ff88;
+    font-weight: bold;
+}
+
+/* ── BÖLÜM BAŞLIĞI ── */
+.section-title {
+    font-size: 12px;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+}
+
+/* ── ZİL SATIRI ── */
+.bell-row {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 11px;
+}
+.bell-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 7px;
+}
+.bell-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.bell-dot.b1    { background: #4488ff; }
+.bell-dot.b2    { background: #ffcc00; }
+.bell-dot.b3    { background: #ff8800; }
+.bell-dot.blast { background: #ff3333; }
+
+.bell-input-row { display: flex; align-items: center; gap: 8px; }
+.bell-input-row label { font-size: 12px; color: #888; min-width: 28px; }
+.bell-input-row input[type=number] {
+    width: 72px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 15px;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+.bell-input-row input[type=number]::-webkit-inner-spin-button,
+.bell-input-row input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.bell-input-row input[type=number]:focus { outline: none; border-color: #00ff88; }
+
+.disp       { font-size: 13px; font-weight: bold; }
+.disp-b1    { color: #4488ff; }
+.disp-b2    { color: #ffcc00; }
+.disp-b3    { color: #ff8800; }
+.disp-blast { color: #ff3333; }
+
+.error-msg { font-size: 11px; color: #ff4444; margin-top: 4px; min-height: 14px; }
+
+.sidebar-apply {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background: #00aa55;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.sidebar-apply:hover { background: #00cc66; }
+
+.sidebar-info {
+    padding: 10px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+}
+
+/* ── ANA ALAN ── */
+h1 { margin-bottom: 10px; font-size: 32px; }
+.speakerTitle { font-size: 22px; opacity: 0.7; }
+#speakerName { font-size: 70px; color: #00ff88; font-weight: bold; margin: 8px 0 16px; }
+.speakerButtons { display: flex; gap: 10px; margin-bottom: 16px; }
+#timer { font-size: 110px; margin: 10px 0; font-variant-numeric: tabular-nums; }
+#questionCountdown { font-size: 32px; color: orange; height: 44px; line-height: 44px; }
+.checkboxArea { margin: 12px 0; font-size: 20px; }
+.buttons { margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+button {
+    padding: 13px 22px;
+    font-size: 17px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #333;
+    color: #fff;
+}
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button:hover:not(:disabled) { background: #444; }
+
+#startBtn    { background: #00aa55; }
+#stopBtn     { background: #cc4400; }
+#resumeBtn   { background: #0055cc; }
+#questionBtn { background: #886600; }
+#cancelBtn   { background: #555; }
+
+/* FLASH */
+.flash1 { background: orange  !important; }
+.flash2 { background: #00ff88 !important; }
+.flash3 { background: orange  !important; }
+
+/* ── BİLDİRİM ALANI ── */
+.notifArea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#notifToggleBtn {
+    padding: 9px 18px;
+    font-size: 15px;
+    background: #1a1a1a;
+    color: #aaa;
+    border: 1px solid #444;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+#notifToggleBtn:hover:not(:disabled) {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #666;
+}
+#notifToggleBtn.notif-active {
+    background: #003322;
+    color: #00ff88;
+    border-color: #00ff88;
+}
+#notifToggleBtn.notif-denied {
+    background: #1a0000;
+    color: #ff5555;
+    border-color: #ff4444;
+    cursor: not-allowed;
+}
+
+.notif-hint {
+    font-size: 12px;
+    color: #666;
+}
+
+
+/* ══════════════════════════════════════════════
+   MOBİL (max-width: 600px)
+   PC'de hiçbir şey değişmez, sadece telefonda
+   ══════════════════════════════════════════════ */
+@media (max-width: 600px) {
+
+    /* ── Genel ── */
+    body {
+        font-size: 14px;
+    }
+
+    /* ── Credit ── */
+    .credit {
+        font-size: 10px;
+        bottom: 10px;
+        left: 12px;
+        padding: 4px 10px;
+    }
+
+    /* ── Sidebar aç butonu ── */
+    #sidebarOpenBtn {
+        top: 12px;
+        right: 12px;
+        padding: 7px 12px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    /* ── Ana alan ── */
+    .main {
+        padding: 24px 16px 100px 16px; /* alt padding: sabit buton barı için boşluk */
+        justify-content: flex-start;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 6px;
+        margin-top: 8px;
+    }
+
+    .speakerTitle {
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    #speakerName {
+        font-size: 52px;
+        margin: 4px 0 10px;
+    }
+
+    /* Önceki / Sonraki butonları */
+    .speakerButtons {
+        gap: 8px;
+        margin-bottom: 10px;
+        white-space: nowrap;
+    }
+
+    .speakerButtons button {
+        padding: 10px 25px;
+        font-size: 13px;
+        border-radius: 10px;
+        flex: 1;
+    }
+
+    /* ── Timer rakamı ── */
+    #timer {
+        font-size: 82px;
+        margin: 6px 0;
+        line-height: 1;
+    }
+
+    /* ── Soru geri sayımı ── */
+    #questionCountdown {
+        font-size: 24px;
+        height: 36px;
+        line-height: 36px;
+    }
+
+    /* ── Checkbox ── */
+    .checkboxArea {
+        font-size: 14px;
+        margin: 8px 0;
+    }
+
+    /* ── Bildirim ── */
+    .notifArea {
+        margin: 4px 0 2px;
+    }
+    #notifToggleBtn {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+
+    /* ── Aksiyon butonları — sabit alt bar ── */
+    .buttons {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 10px 12px 14px;
+        background: rgba(10, 10, 10, 0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid #2a2a2a;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        z-index: 50;
+    }
+
+    .buttons button {
+        flex: 1 1 calc(33% - 8px);
+        min-width: 90px;
+        max-width: 140px;
+        padding: 13px 8px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    /* ── Sidebar — tam ekran çekmece ── */
+    .sidebar {
+        width: 100%;
+        padding: 52px 16px 100px 16px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Sidebar kapat butonu konumu */
+    #sidebarCloseBtn {
+        top: 12px;
+        right: 14px;
+        font-size: 22px;
+    }
+
+    /* Format sekmeleri */
+    .format-tabs {
+        gap: 7px;
+        padding-top: 4px;
+    }
+
+    .fmt-btn {
+        padding: 11px 14px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    /* Zil satırları */
+    .bell-row {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .bell-label {
+        font-size: 13px;
+    }
+
+    .bell-input-row input[type=number] {
+        width: 68px;
+        font-size: 16px;
+        padding: 7px 8px;
+    }
+
+    .disp {
+        font-size: 14px;
+    }
+
+    /* Uygula butonu */
+    .sidebar-apply {
+        padding: 13px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    /* Bilgi alanı */
+    .sidebar-info {
+        font-size: 12px;
+        line-height: 1.9;
+    }
+
+    .section-title {
+        font-size: 11px;
+    }
+}

@@ -1,0 +1,133 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timekeeper</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="credit">Created by CGT</div>
+<!-- SIDEBAR AÇ BUTONU -->
+<button id="sidebarOpenBtn" onclick="openSidebar()" title="Zil ayarları">⚙</button>
+
+<div class="app">
+
+  <!-- ANA ALAN -->
+  <div class="main">
+    <h1>Timekeeper</h1>
+
+    <div class="speakerTitle">Konuşmacı</div>
+    <div id="speakerName">HA1</div>
+
+    <div class="speakerButtons">
+      <button id="prevSpeakerBtn" onclick="prevSpeaker()">◀ Önceki</button>
+      <button id="nextSpeakerBtn" onclick="nextSpeaker()">Sonraki ▶</button>
+    </div>
+
+    <div id="timer">00:00</div>
+    <div id="questionCountdown"></div>
+
+    <div class="checkboxArea">
+      <label>
+        <input type="checkbox" id="soundToggle" checked>
+        Soru süresi bitince ses çal
+      </label>
+    </div>
+
+    <div class="notifArea">
+      <button id="notifToggleBtn" onclick="toggleNotif()">🔔 Bildirimleri Aç</button>
+      <span class="notif-hint" id="notifHint"></span>
+    </div>
+
+    <div class="buttons">
+      <button id="startBtn"    onclick="startTimer()">Başlat</button>
+      <button id="stopBtn"     onclick="stopTimer()"    style="display:none;">Durdur</button>
+      <button id="resumeBtn"   onclick="resumeTimer()"  style="display:none;">Devam Et</button>
+      <button id="questionBtn" onclick="questionTimer()">Soru</button>
+      <button id="cancelBtn"   onclick="cancelQuestion()" style="display:none;">İptal</button>
+      <button onclick="resetTimer()">Sıfırla</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+
+    <button id="sidebarCloseBtn" onclick="closeSidebar()" title="Kapat">✕</button>
+
+    <!-- FORMAT SEÇİMİ -->
+    <div class="format-tabs">
+      <button class="fmt-btn active" id="fmtBP" onclick="setFormat('bp')">İngiliz Parlamenter</button>
+      <button class="fmt-btn"        id="fmtWS" onclick="setFormat('ws')">World Schools</button>
+	  <button class="fmt-btn"        id="fmtAP" onclick="setFormat('ap')">Asya Parlamenter</button>
+	  <button class="fmt-btn"        id="fmtAU" onclick="setFormat('au')">Australs (Güney) Formatı</button>
+      <button class="fmt-btn"        id="fmtOther" onclick="setFormat('other')">Diğer</button>
+    </div>
+
+    <!-- ZİL AYARLARI (sadece "Diğer" modda görünür) -->
+    <div id="customBellsPanel">
+
+      <div class="section-title">Zil Ayarları</div>
+
+      <div class="bell-row">
+        <div class="bell-label"><span class="bell-dot b1"></span> 1. Zil</div>
+        <div class="bell-input-row">
+          <label>Sn:</label>
+          <input type="number" id="b1val" min="1" step="1" value="60">
+          <span id="b1disp" class="disp disp-b1">1:00</span>
+        </div>
+        <div class="error-msg" id="b1err"></div>
+      </div>
+
+      <div class="bell-row">
+        <div class="bell-label"><span class="bell-dot b2"></span> 2. Zil</div>
+        <div class="bell-input-row">
+          <label>Sn:</label>
+          <input type="number" id="b2val" min="1" step="1" value="360">
+          <span id="b2disp" class="disp disp-b2">6:00</span>
+        </div>
+        <div class="error-msg" id="b2err"></div>
+      </div>
+
+      <div class="bell-row">
+        <div class="bell-label"><span class="bell-dot b3"></span> 3. Zil</div>
+        <div class="bell-input-row">
+          <label>Sn:</label>
+          <input type="number" id="b3val" min="1" step="1" value="420">
+          <span id="b3disp" class="disp disp-b3">7:00</span>
+        </div>
+        <div class="error-msg" id="b3err"></div>
+      </div>
+
+      <div class="bell-row">
+        <div class="bell-label"><span class="bell-dot blast"></span> Son Zil (Toplam Süre)</div>
+        <div class="bell-input-row">
+          <label>Sn:</label>
+          <input type="number" id="blastval" min="1" step="1" value="440">
+          <span id="blastdisp" class="disp disp-blast">7:20</span>
+        </div>
+        <div class="error-msg" id="blasterr"></div>
+      </div>
+
+      <button class="sidebar-apply" onclick="applyBells()">✓ Uygula</button>
+
+    </div><!-- /customBellsPanel -->
+
+    <!-- BİLGİ ALANI (BP ve WS modda mevcut ayarları gösterir) -->
+    <div id="presetInfoPanel">
+      <div class="section-title">Mevcut Ayarlar</div>
+      <div id="presetInfoText" class="sidebar-info"></div>
+    </div>
+
+    <div class="sidebar-info" style="margin-top:4px;">
+      Konuşmacı değişince sayaç sıfırlanır.
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /app -->
+
+<script src="script.js"></script>
+</body>
+</html>
